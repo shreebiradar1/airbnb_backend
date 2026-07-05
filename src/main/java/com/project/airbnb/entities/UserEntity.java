@@ -1,12 +1,8 @@
 package com.project.airbnb.entities;
 
-import java.time.LocalDate;
-import java.util.Set;
-
 import com.project.airbnb.enums.Gender;
 import com.project.airbnb.enums.Role;
 import com.project.airbnb.enums.UserStatus;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -19,14 +15,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
+import java.time.LocalDate;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Table(name = "users")
-@Getter @Setter
+@Getter
+@Setter
 public class UserEntity {
 
   @Id
@@ -61,6 +61,7 @@ public class UserEntity {
   private String mobile;
 
   @Enumerated(EnumType.STRING)
+  @NotNull
   private Gender gender;
 
   @ElementCollection(fetch = FetchType.EAGER) // JPA will create new table
@@ -68,5 +69,6 @@ public class UserEntity {
   private Set<Role> role; // (Admin | Tenant | End-User)
 
   @Enumerated(EnumType.STRING)
+  @NotNull
   private UserStatus status = UserStatus.ACTIVE;
 }
