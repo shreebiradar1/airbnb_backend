@@ -2,7 +2,7 @@ package com.project.airbnb.service.interfaces;
 
 import com.project.airbnb.dto.request.UserRequest;
 import com.project.airbnb.dto.response.UserResponse;
-import com.project.airbnb.entities.UserEntity;
+import com.project.airbnb.dto.response.UserStatusRes;
 import com.project.airbnb.enums.UserStatus;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public interface UserService {
   UserResponse getByUsernameOrEmail(String credentials);
 
   // Update
-  UserResponse patchUser(UserRequest user);
+  UserResponse patchUser(UserRequest request);
 
   //  UserResponse updateUser(UserUpdateRequest user);
 
@@ -31,10 +31,10 @@ public interface UserService {
   UserResponse recoverUser(Long userId);
 
   // This method only use for processing not to the user
-  UserEntity getByUserId(Long userId);
+  //  UserEntity getByUserId(Long userId);
 
   // Others | extra methods then CRUD
-  UserResponse updateUserStatus(Long userId, UserStatus userStatus);
+  UserStatusRes updateUserStatus(Long userId, UserStatus userStatus);
 
   //  List<BookingResponse> getUserBookingHistory(Long userId);
   void changePassword(Long userId, String oldPassword, String newPassword);
