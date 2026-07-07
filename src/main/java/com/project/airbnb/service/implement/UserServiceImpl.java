@@ -9,14 +9,17 @@ import com.project.airbnb.mapper.UserMapper;
 import com.project.airbnb.repository.UserRepository;
 import com.project.airbnb.service.interfaces.UserService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-// For @Transactional annotated method repo.save() is removed because JPA perform dirty checking
+// For @Transactional annotated method repo.save() is not mentioned because JPA perform dirty
+// checking
+@Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
   private final UserRepository repo;
 
-  public UserServiceImpl(UserRepository repo) {
-    this.repo = repo;
-  }
+  //  private final PasswordEncoder encoder;
 
   @Override
   @Transactional
@@ -28,6 +31,7 @@ public class UserServiceImpl implements UserService {
       throw new IllegalStateException("Email already exists");
     }
     UserEntity user = UserMapper.toEntity(request);
+    //    user.setPassword(encoder.encode(user.getPassword()));
     UserEntity savedUser = repo.save(user);
     return toResponse(savedUser);
   }
@@ -78,7 +82,8 @@ public class UserServiceImpl implements UserService {
   public UserStatusRes updateUserStatus(Long userId, UserStatus newStatus) {
     UserEntity user = getUserOrThrow(userId);
     UserStatus currentStatus = user.getStatus();
-    UserStatusRes response = new UserStatusRes(user.getUsername(), currentStatus, newStatus);
+    UserStatusRes response =
+        new UserStatusRes(user.getUserId(), user.getUsername(), currentStatus, newStatus);
     validateStatusTransition(currentStatus, newStatus);
     user.setStatus(newStatus);
     return response;
@@ -88,6 +93,8 @@ public class UserServiceImpl implements UserService {
   @Transactional
   public UserResponse deleteUserPermanently(Long userId) {
     UserEntity user = getUserOrThrow(userId);
+    user.getRole().clear();
+    repo.save(user);
     repo.delete(user);
     return toResponse(user);
   }
