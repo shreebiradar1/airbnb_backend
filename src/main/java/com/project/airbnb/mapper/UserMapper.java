@@ -5,17 +5,13 @@ import com.project.airbnb.dto.response.UserResponse;
 import com.project.airbnb.dto.summary.UserSummary;
 import com.project.airbnb.entities.UserEntity;
 import java.util.Set;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-@RequiredArgsConstructor
 public class UserMapper {
-  private static PasswordEncoder encoder;
 
   public static UserEntity toEntity(UserRequest request) {
     UserEntity user = new UserEntity();
     user.setUsername(request.username());
-    user.setPassword(encoder.encode(request.password()));
+    user.setPassword(request.password());
     user.setFirstName(request.summary().firstName());
     user.setLastName(request.summary().lastName());
     user.setEmail(request.summary().email());
