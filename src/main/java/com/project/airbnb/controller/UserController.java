@@ -44,9 +44,10 @@ public class UserController {
   //    return ResponseEntity.status(HttpStatus.OK).body(userService.getByEmail(email));
   //  }
 
-  @GetMapping("/{identifier}")
+  //  @GetMapping("/{identifier}")
+  @GetMapping
   public ResponseEntity<UserResponse> getByUsernameOrEmail(
-      @NotBlank @PathVariable String identifier) {
+      @NotBlank @RequestParam String identifier) {
     return ResponseEntity.status(HttpStatus.OK).body(userService.getByUsernameOrEmail(identifier));
   }
 
