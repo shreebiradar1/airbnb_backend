@@ -3,6 +3,7 @@ package com.project.airbnb.entities;
 import com.project.airbnb.enums.Gender;
 import com.project.airbnb.enums.Role;
 import com.project.airbnb.enums.UserStatus;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -12,6 +13,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -64,7 +66,9 @@ public class UserEntity {
   @NotNull
   private Gender gender;
 
-  @ElementCollection(fetch = FetchType.EAGER) // JPA will create new table
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+  @Column(name = "role")
   @Enumerated(EnumType.STRING)
   private Set<Role> role; // (Admin | Tenant | End-User)
 
