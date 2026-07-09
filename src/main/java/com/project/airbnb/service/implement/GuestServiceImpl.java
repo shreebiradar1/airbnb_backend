@@ -10,7 +10,9 @@ import com.project.airbnb.service.interfaces.GuestService;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@Service
 @RequiredArgsConstructor
 public class GuestServiceImpl implements GuestService {
 
@@ -41,6 +43,7 @@ public class GuestServiceImpl implements GuestService {
   public GuestResponse updateGuest(GuestUpdateReq request) {
     GuestEntity guest = getGuestOrThrow(request.guestId());
     GuestEntity savedGuest = GuestMapper.toEntity(request);
+    repo.save(savedGuest);
     return GuestMapper.toResponse(savedGuest);
   }
 
@@ -49,7 +52,7 @@ public class GuestServiceImpl implements GuestService {
   public String deleteGuest(Long id) {
     GuestEntity guest = getGuestOrThrow(id);
     repo.delete(guest);
-    return guest.getName();
+    return guest.getName() + " has been deleted";
   }
 
   private GuestEntity getGuestOrThrow(Long id) {
