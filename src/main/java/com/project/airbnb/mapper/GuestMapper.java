@@ -19,10 +19,12 @@ public class GuestMapper {
   public static GuestEntity toEntity(GuestUpdateReq request) {
     if (request == null) throw new NullPointerException("GuestRequest cannot be null");
     GuestEntity guest = new GuestEntity();
-    guest.setGuestId(request.guestId());
-    guest.setName(request.name());
-    guest.setAge(request.age());
-    guest.setGender(request.gender());
+    if (request.guestId() != null) {
+      if (request.name() != null) guest.setName(request.name());
+      if (request.age() != null) guest.setAge(request.age());
+      if (request.gender() != null) guest.setGender(request.gender());
+    } else throw new NullPointerException("GuestId cannot be null");
+
     return guest;
   }
 
