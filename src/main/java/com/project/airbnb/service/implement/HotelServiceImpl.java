@@ -7,11 +7,14 @@ import com.project.airbnb.dto.response.HotelResponse;
 import com.project.airbnb.dto.response.HotelSearchRes;
 import com.project.airbnb.entities.HotelEntity;
 import com.project.airbnb.entities.RoomEntity;
+import com.project.airbnb.entities.TenantEntity;
 import com.project.airbnb.entities.helper.HotelDetails;
 import com.project.airbnb.enums.RoomStatus;
 import com.project.airbnb.mapper.HotelMapper;
 import com.project.airbnb.repository.HotelRepository;
 import com.project.airbnb.service.interfaces.HotelService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,13 +23,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class HotelServiceImpl implements HotelService {
-
   private final HotelRepository hotelRepo;
+  @PersistenceContext private EntityManager entityManager;
 
   @Override
   @Transactional
   public HotelResponse addHotel(HotelAddRequest hotelRequest) {
+    TenantEntity tenant = entityManager.find(TenantEntity.class, hotelRequest.tenantId());
+    if (tenant == null) throw new RuntimeException("Tenant not found");
     HotelEntity hotel = HotelMapper.toEntity(hotelRequest);
+    hotel.setTenant(tenant);
     return toResponse(hotelRepo.save(hotel));
   }
 
