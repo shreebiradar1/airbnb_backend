@@ -4,9 +4,12 @@ import com.project.airbnb.entities.helper.HotelDetails;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -39,10 +42,10 @@ public class HotelEntity {
 
   @UpdateTimestamp private LocalDateTime updatedAt;
 
-  // Tenant details
-  //  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  //  @JoinColumn(name = "tenant_id", nullable = false)
-  //  private TenantEntity tenant;
+  //   Tenant details
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "tenant_id", nullable = false)
+  private TenantEntity tenant;
 
   @OneToMany(mappedBy = "hotel")
   private List<RoomEntity> rooms = new ArrayList<>();
